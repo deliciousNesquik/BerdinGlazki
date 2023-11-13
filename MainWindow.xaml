@@ -16,7 +16,7 @@
         <Frame Grid.Row="1" Name="MainFrame" NavigationUIVisibility="Hidden" ContentRendered="MainFrame_ContentRendered"></Frame>
 
         <Image HorizontalAlignment="Left" Source="image/Глазки-save.png"></Image>
-        <TextBlock Name="textBlock" Text="Глазки" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock x:Name="textBlock" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Language="ru-ru" Text="Список агентов"/></TextBlock>
 
         <Button Content="Назад" Name="BtnBack" HorizontalAlignment="Right" Click="BtnBack_Click"></Button>
     </Grid>
