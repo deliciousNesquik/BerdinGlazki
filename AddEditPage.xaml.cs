@@ -98,6 +98,10 @@ namespace Berdin_Glazki
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
             var currentAgent = (sender as Button).DataContext as Agent;
+
+            var currentClientServices = Berdin_GlazkiEntities.GetContext().ProductSale.ToList();
+            //currentClientServices = currentClientServices.Where(p => p.)
+
             if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try
