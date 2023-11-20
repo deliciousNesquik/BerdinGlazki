@@ -11,7 +11,9 @@ namespace Berdin_Glazki
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Linq;
+    using System.Windows.Media;
+
     public partial class Agent
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -48,6 +50,81 @@ namespace Berdin_Glazki
             {
                 return AgentType.Title;
             }
-        }        
+        }
+        public int AgentProductCount => GetCount();
+
+        public int GetCount()
+        {
+            int count = 0;
+            var context = Berdin_GlazkiEntities.GetContext().ProductSale.Where(p => p.AgentID == ID).ToList();
+
+            foreach(var i in context)
+            {
+                count += i.ProductCount;
+            }
+            return count;
+        }
+
+        public double AgentProdCost()
+        {
+            double summa = 0;
+            var context = Berdin_GlazkiEntities.GetContext().ProductSale.Where(p => p.AgentID == ID).ToList();
+            var prod = Berdin_GlazkiEntities.GetContext().Product.ToList();
+            foreach (var productSale in context)
+            {
+                foreach (var productCount in prod)
+                {
+                    if (productSale.ProductID == productCount.ID)
+                    {
+                        summa = Convert.ToDouble(productSale.ProductCount) * Convert.ToDouble(productCount.MinCostForAgent);
+                    }
+                }
+
+            }
+
+            return summa * 500;
+
+        }
+
+        public int getDiscount()
+        {
+            double summa = AgentProdCost();
+            if (summa < 10000)
+            {
+                return 0;
+            }
+            else if (summa >= 10000 && summa < 50000)
+            {
+                return 5;
+            }
+            else if (summa >= 50000 && summa < 150000)
+            {
+                return 10;
+            }
+            else if (summa >= 150000 && summa < 500000)
+            {
+                return 20;
+            }
+            else
+            {
+                return 25;
+            }
+        }
+
+        public int Discount => getDiscount();
+
+        public SolidColorBrush Colored
+        {
+            get
+            {
+                if (Discount >= 25)
+                {
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("LightGreen");
+                }
+                return (SolidColorBrush)new BrushConverter().ConvertFromString("White");
+            }
+        }
+
+
     }
 }

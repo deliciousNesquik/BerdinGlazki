@@ -97,23 +97,31 @@ namespace Berdin_Glazki
 
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
-            var currentAgent = (sender as Button).DataContext as Agent;
-
-            var currentClientServices = Berdin_GlazkiEntities.GetContext().ProductSale.ToList();
-            //currentClientServices = currentClientServices.Where(p => p.)
-
-            if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            _currentAgent = (sender as Button).DataContext as Agent;
+            var currentClientService = Berdin_GlazkiEntities.GetContext().ProductSale.ToList();
+            currentClientService = currentClientService.Where(p => p.AgentID == _currentAgent.ID).ToList();
+            if(currentClientService.Count != 0)
             {
-                try
+                MessageBox.Show("Невозможно выполнить удаление, так как существует запись на эту услугу ");
+            }
+            else
+            {
+                if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    Berdin_GlazkiEntities.GetContext().Agent.Remove(currentAgent); Berdin_GlazkiEntities.GetContext().SaveChanges();
-                    Manager.MainFrame.GoBack();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
+                    try
+                    {
+                        Berdin_GlazkiEntities.GetContext().Agent.Remove(_currentAgent); 
+                        Berdin_GlazkiEntities.GetContext().SaveChanges();
+                        Manager.MainFrame.GoBack();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
                 }
             }
+
+            
         }
     }
 }
